@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+    <h1 id="demo">0</h1>
+   <button onclick="increment()">increment</button>
+  <button onclick="decrement()">decrement</button>
+  <script>
+    let value=0;
+    const demo = document.getElementById('demo');
+    function increment(){
+      value++;
+      demo.innerHTML= value;
+    }
+    function decrement(){
+      value--;
+      demo.innerHTML=value;
+    }
+  </script>
+</body>
+</html>

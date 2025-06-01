@@ -1,0 +1,26 @@
+#hero{
+    background: url('/website/img/hero4.png');
+    background-position: center;
+    background-size: cover;
+    height:100vh;
+    width:100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 0px 80px;
+
+}
+#hero h4{
+    padding-bottom: 10px;
+}
+#hero h1{
+    color:#088178;
+}
+#hero button{
+    background: url('/website/img/button.png');
+    background-color: transparent;
+    color: #088178;
+    border: 0;
+    padding: 14px 80px 14px 65px;
+}

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>CRUD Operations</title>
+</head>
+
+<body>
+    <h1>Data Entry Form</h1>
+    <form id="dataForm" onsubmit="validationForm()">
+        <label for="name">Name:</label><br>
+        <input type="text" id="name" name="name" required><br><br>
+        <label for="lastname">lastName:</label><br>
+        <input type="text" id="lastname" name="lastname" required><br><br>
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" required ><br><br>
+        <label for="Employeeid">Employeeid</label><br>
+        <input type="text" id="Employeeid" name="Employeeid" required><br><br>
+        <label for="Address">Address</label><br>
+        <input type="text" id="Address" name="Address" required><br><br>
+        <button type="button" onclick="addData()">Add Data</button>
+        <button type="button" onclick="updateData()">Update Data</button>
+    </form>
+
+    <h2>Data List</h2>
+    <table id="dataTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>lastName</th>
+                <th>Email</th>
+                <th>Employeeid</th>
+                <th>Address</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <script>
+        let dataArray = [];
+        let selectedRow = 0;
+
+        function addData() {
+            if (!validateForm())return ;
+            const name = document.getElementById('name').value;
+            const lastname = document.getElementById('lastname').value;
+            const email = document.getElementById('email').value;
+            const Employeeid = document.getElementById('Employeeid').value;
+            const Address = document.getElementById('Address').value;
+
+            const newData = {
+                id: dataArray.length + 1,
+                name,
+                lastname,
+                email,
+                Employeeid,
+                Address
+            };
+
+            dataArray.push(newData);
+            displayData();
+            clearForm();
+        }
+
+        function updateData() {
+            if (!validateForm()) return;
+
+            if (selectedRow) {
+                selectedRow.name = document.getElementById('name').value;
+                selectedRow.email = document.getElementById('email').value;
+                selectedRow.Employeeid = document.getElementById('Employeeid').value;
+                selectedRow.lastname = document.getElementById('lastname').value;
+                selectedRow.Address = document.getElementById('Address').value;
+                displayData();
+                clearForm();
+                document.querySelector('#dataForm button[onclick="addData()"]').style.display = 'inline-block';
+                document.querySelector('#dataForm button[onclick="updateData()"]').style.display = 'none';
+                selectedRow = 0;
+            }
+        }
+
+
+        function displayData() {
+            const tableBody = document.querySelector('#dataTable tbody');
+            tableBody.innerHTML = '';
+
+            dataArray.map(item => {
+                const row = tableBody.insertRow();
+                row.insertCell().textContent = item.id;
+                row.insertCell().textContent = item.name;
+                row.insertCell().textContent = item.lastname;
+                row.insertCell().textContent = item.email;
+                row.insertCell().textContent = item.Employeeid;
+                row.insertCell().textContent = item.Address
+                const actionsCell = row.insertCell();
+                actionsCell.innerHTML = `<button onclick="editData(${item.id})">Edit</button> <button onclick="deleteData(${item.id})">Delete</button>`;
+            });
+        }
+        function validateForm() {
+            const name = document.getElementById('name').value.trim();
+            const lastname = document.getElementById('lastname').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const employeeId = document.getElementById('Employeeid').value.trim();
+            const address = document.getElementById('Address').value.trim();
+
+            function isOnlyLetters(str) {
+                for (let i = 0; i < str.length; i++) {
+                    const char = str[i];
+                    if (!(char >= 'A' && char <= 'Z') &&
+                        !(char >= 'a' && char <= 'z') &&
+                        char !== ' ') {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            if (name.length === 0 || name.length > 20 || !isOnlyLetters(name)) {
+                alert("Name must contain only letters and spaces, and be 1-20 characters long.");
+                return false;
+            }
+            if (lastname.length === 0 || lastname.length > 20 || !isOnlyLetters(lastname)) {
+                alert("Last name must contain only letters and spaces, and be 1-20 characters long.");
+                return false;
+            }
+            if (!email.includes('@') || !email.includes('.') || email.startsWith('@') || email.endsWith('@')) {
+                alert("Please enter a valid email address.");
+                return false;
+            }
+            if (employeeId.length === 0 || isNaN(employeeId)) {
+                alert("Employee ID must be a number.");
+                return false;
+            }
+            if (address.length > 0 && !isOnlyLetters(address)) {
+                alert("Address can contain only letters and spaces.");
+                return false;
+            }
+            return true;
+        }
+
+        function editData(id) {
+            selectedRow = dataArray.find(item => item.id === id);
+            if (selectedRow) {
+                document.getElementById('name').value = selectedRow.name;
+                document.getElementById('email').value = selectedRow.email;
+                document.getElementById('Employeeid').value = selectedRow.Employeeid;
+                document.getElementById('lastname').value = selectedRow.lastname;
+                document.getElementById('Address').value = selectedRow.Address;
+                document.querySelector('#dataForm button[onclick="addData()"]').style.display = 'none';
+                document.querySelector('#dataForm button[onclick="updateData()"]').style.display = 'inline-block';
+            }
+        }
+        /*function deleteData(id) {
+            dataArray = dataArray.filter(item => item.id !== id);
+            displayData();
+        }*/
+        function deleteData(id) {
+            dataArray = dataArray.filter(item => item.id !== id);
+            dataArray.forEach((item, index) => item.id = index + 1);
+            displayData();
+        }
+        function clearForm() {
+            document.getElementById('name').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('lastname').value = '';
+            document.getElementById('Employeeid').value = '';
+            document.getElementById('Address').value = '';
+        }
+
+    </script>
+</body>
+
+</html>
